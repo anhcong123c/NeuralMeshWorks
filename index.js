@@ -1,15 +1,18 @@
-function productExceptSelf(nums) {
-  const n = nums.length;
-  const result = new Array(n).fill(1);
-  let product = 1;
-  for (let i = 0; i < n; i++) {
-    result[i] *= product;
-    product *= nums[i];
+function minPathSum(grid) {
+  const m = grid.length;
+  const n = grid[0].length;
+  const dp = new Array(m).fill(0).map(() => new Array(n).fill(0));
+  dp[0][0] = grid[0][0];
+  for (let i = 1; i < m; i++) {
+    dp[i][0] = dp[i - 1][0] + grid[i][0];
   }
-  product = 1;
-  for (let i = n - 1; i >= 0; i--) {
-    result[i] *= product;
-    product *= nums[i];
+  for (let j = 1; j < n; j++) {
+    dp[0][j] = dp[0][j - 1] + grid[0][j];
   }
-  return result;
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      dp[i][j] = grid[i][j] + Math.min(dp[i - 1][j], dp[i][j - 1]);
+    }
+  }
+  return dp[m - 1][n - 1];
 }
