@@ -1,19 +1,22 @@
-function rotateRight(head, k) {
-  if (!head) return null;
-  let length = 1;
-  let tail = head;
-  while (tail.next) {
-    length++;
-    tail = tail.next;
+function mergeKLists(lists) {
+  if (!lists || !lists.length) return null;
+  return mergeLists(lists, 0, lists.length - 1);
+  function mergeLists(lists, start, end) {
+    if (start === end) return lists[start];
+    const mid = Math.floor((start + end) / 2);
+    const left = mergeLists(lists, start, mid);
+    const right = mergeLists(lists, mid + 1, end);
+    return mergeTwoLists(left, right);
   }
-  k %= length;
-  if (k === 0) return head;
-  let newTail = head;
-  for (let i = 0; i < length - k - 1; i++) {
-    newTail = newTail.next;
+  function mergeTwoLists(l1, l2) {
+    if (!l1) return l2;
+    if (!l2) return l1;
+    if (l1.val < l2.val) {
+      l1.next = mergeTwoLists(l1.next, l2);
+      return l1;
+    } else {
+      l2.next = mergeTwoLists(l1, l2.next);
+      return l2;
+    }
   }
-  const newHead = newTail.next;
-  newTail.next = null;
-  tail.next = head;
-  return newHead;
 }
